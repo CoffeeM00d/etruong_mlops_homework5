@@ -7,4 +7,5 @@ router = APIRouter()
 @router.post("/similar_responses", response_model=RAGResponse)
 def get_similar_responses(request: RAGRequest):
     results = retriever.get_similar_responses(request.question)
-    return RAGResponse(answers=results)
+    return {"answers": results[:request.num_responses]}
+    #return RAGResponse(answers=results)
