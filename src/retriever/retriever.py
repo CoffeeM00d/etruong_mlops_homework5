@@ -30,5 +30,19 @@ def get_similar_responses(question: str) -> list:
     labels, distances = index.knn_query(question_embedding, k=top_k)
     return [df.iloc[idx]['wikipedia_excerpt'] for idx in labels[0]]
     
+def get_similarity_score(question: str) -> list[dict]:
+    question_embedding = model.encode(question)
+    labels, distances = index.knn_query(question_embedding, k=top_k)    
+    return [
+        {
+            "question": df.iloc[idx]['prompt'],
+            "wiki_excerpt": df.iloc[idx]['wikipedia_excerpt'],
+            "similarity": float(1 - distances[0][i])  # Convert distance to similarity
+        }
+        for i, idx in enumerate(labels[0])
+    ]
+    
+
+    
     
     
